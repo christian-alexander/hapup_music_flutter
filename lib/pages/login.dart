@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'music/music_list.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -22,7 +23,11 @@ class _LoginState extends State<Login> {
     setState(() {
       if (successLogin) {
         _isWrongCredential = false;
-        print('sukses login');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const MusicList(),
+          ),
+        );
       } else {
         _isWrongCredential = true;
       }
@@ -176,7 +181,7 @@ class _LoginState extends State<Login> {
                 margin: EdgeInsets.only(
                   bottom: 10
                 ),
-                height: 30,
+                height: 40,
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
