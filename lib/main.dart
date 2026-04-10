@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/login_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -7,14 +8,16 @@ void main() {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      title: "HappyMusic",
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF8F9FC),
+        fontFamily: "Roboto",
       ),
+      home: const LoginPage(),
     );
   }
 }
