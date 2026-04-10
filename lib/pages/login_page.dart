@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../services/auth_service.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -8,6 +8,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _email = '';
+  String _password = '';
+  bool _isWrongCredential = false;
+
+  Future<void> _handleLogin() async {
+    final successLogin = await AuthService.processLogin(
+      _email.trim(),
+      _password,
+    );
+
+    // untuk set state harus setState 
+    setState(() {
+      if (successLogin) {
+        _isWrongCredential = false;
+        print('sukses login');
+      } else {
+        _isWrongCredential = true;
+      }
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              
               // short desc login
               Container(
                 margin: EdgeInsets.only(
@@ -54,6 +77,43 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              
+              // alert wrong password, hanya kalau wrong pw
+              _isWrongCredential ?
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 82, 97),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    const Icon(
+                      // icons
+                      Icons.error_outline,
+                      color: Color.fromARGB(255, 255, 255, 255), 
+                      size: 18
+                    ),
+                    // sizedbox cuma buat spasi
+                    const SizedBox(width: 8),
+                    // expanded perlu agar text auto kebawah jika tidak cukup
+                    Expanded(
+                      child: Text(
+                        "Email atau password salah, harap coba lagi",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255)
+                        ),
+                      ), 
+                    )
+                    
+                  ],
+                )
+              )
+              : SizedBox.shrink(),
+
               // inputan email
               Container(
                 margin: EdgeInsets.only(
@@ -78,8 +138,10 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Email',
                     hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                   ),
+                  onChanged: (value) => _email = value,
                 ),
               ),
+              
               // inputan password
               Container(
                 margin: EdgeInsets.only(
@@ -87,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 height: 30,
                 child: TextField(
+                  obscureText: true,
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontSize: 12,
@@ -104,8 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                   ),
+                  onChanged: (value) => _password = value,
                 ),
               ),
+              
               // tombol login
               Container(
                 margin: EdgeInsets.only(
@@ -122,12 +187,12 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
-                    //
-                  },
+                  // on press try login untuk cek pw 
+                  onPressed: () => _handleLogin(),
                   child: Text('Login'),
                 ),
               ),
+              
               // short desc demo akun
               Container(
                 width: double.infinity,
