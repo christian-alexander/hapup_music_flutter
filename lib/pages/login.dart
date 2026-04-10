@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(30),
+          padding: EdgeInsets.all(30),
           decoration: BoxDecoration(
             color: Color(0xFFFFFFFF),
             boxShadow: [
@@ -62,7 +62,7 @@ class _LoginState extends State<Login> {
                 margin: EdgeInsets.only(
                   bottom:15
                 ),
-                child: Text(
+                child: const Text(
                   'HappyMusic',
                   style: TextStyle(
                     fontSize: 24, // ukuran dalam logical pixels
@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
                 margin: EdgeInsets.only(
                   bottom:15
                 ),
-                child: Text(
+                child: const Text(
                   'Login',
                   style: TextStyle(
                     fontSize: 16, // ukuran dalam logical pixels
@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                     const SizedBox(width: 8),
                     // expanded perlu agar text auto kebawah jika tidak cukup
                     Expanded(
-                      child: Text(
+                      child: const Text(
                         "Email atau password salah, harap coba lagi",
                         style: TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255)
@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
                   ],
                 )
               )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
 
               // inputan email
               Container(
@@ -194,7 +194,7 @@ class _LoginState extends State<Login> {
                   ),
                   // on press try login untuk cek pw 
                   onPressed: () => _handleLogin(),
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 ),
               ),
               
@@ -210,8 +210,8 @@ class _LoginState extends State<Login> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Demo Credential"),
-                    Text(
+                    const Text("Demo Credential"),
+                    const Text(
                       "admin@gmail.com / admin",
                       style: TextStyle(
                         color: Color.fromARGB(100, 0, 0, 0)
