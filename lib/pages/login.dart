@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<Login> createState() => _LoginState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginState extends State<Login> {
   String _email = '';
   String _password = '';
   bool _isWrongCredential = false;
