@@ -13,7 +13,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(30),
           decoration: BoxDecoration(
             color: Color(0xFFFFFFFF),
             boxShadow: [
@@ -24,9 +24,25 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           width: MediaQuery.of(context).size.width * 0.7,
+          constraints: BoxConstraints(
+            maxWidth: 300,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // title happymusic
+              Container(
+                margin: EdgeInsets.only(
+                  bottom:15
+                ),
+                child: Text(
+                  'HappyMusic',
+                  style: TextStyle(
+                    fontSize: 24, // ukuran dalam logical pixels
+                  ),
+                ),
+              ),
+              // short desc login
               Container(
                 margin: EdgeInsets.only(
                   bottom:15
@@ -38,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              // Username field
+              // inputan email
               Container(
                 margin: EdgeInsets.only(
                   bottom: 10,
@@ -64,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              // inputan password
               Container(
                 margin: EdgeInsets.only(
                   bottom: 10,
@@ -89,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              // tombol login
               Container(
                 margin: EdgeInsets.only(
                   bottom: 10
@@ -108,8 +126,30 @@ class _LoginPageState extends State<LoginPage> {
                     //
                   },
                   child: Text('Login'),
+                ),
+              ),
+              // short desc demo akun
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFFfff3cd),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Demo Credential"),
+                    Text(
+                      "admin@gmail.com / admin",
+                      style: TextStyle(
+                        color: Color.fromARGB(100, 0, 0, 0)
+                      ),
+                    ),
+                  ]
                 )
-              )
+              ),
             ],
           ),
         ),
