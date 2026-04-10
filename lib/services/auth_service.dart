@@ -22,4 +22,11 @@ class AuthService {
     }
     return false;
   }
+
+  // logout
+  static Future<void> processLogout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyPrefsForLoggedIn, false);
+    await prefs.setString(_keyPrefsForEmail, 'email');
+  }
 }
