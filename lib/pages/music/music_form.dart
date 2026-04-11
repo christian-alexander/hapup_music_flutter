@@ -28,7 +28,7 @@ class _MusicFormState extends State<MusicForm> {
           onPressed: () => _back(),
         ),
         title: Text(
-          (widget.musicId == null)? "Tambah Lagu" : "Ubah Lagu",
+          (widget.musicId == null)? "Tambah Musik" : "Ubah Musik",
           style: TextStyle(
             fontSize: 18,
             color: Color(0xFFffffff)
@@ -54,7 +54,7 @@ class _MusicFormState extends State<MusicForm> {
                     fontSize: 12,
                   ),
                   decoration: InputDecoration(
-                    labelText: "Judul Lagu",
+                    labelText: "Judul Musik",
                     labelStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                     contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     enabledBorder: OutlineInputBorder(

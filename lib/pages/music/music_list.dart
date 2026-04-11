@@ -262,7 +262,7 @@ class _MusicListState extends State<MusicList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // Info lagu 
+                  // Info musik
                   Container(
                     width: 100, 
                     child: Column(
