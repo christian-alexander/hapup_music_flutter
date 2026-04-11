@@ -245,10 +245,128 @@ class _MusicListState extends State<MusicList> {
                   return Card(
                     margin: EdgeInsets.all(10),
                     elevation: 3,
-                    child: ListTile(
-                      leading: Icon(Icons.dashboard),
-                      title: Text("Card $index"),
-                      subtitle: Text("Deskripsi card $index"),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.music_note_outlined),
+                          title: Text("Judul $index"),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Penyanyi $index"),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF8D6E63),
+                                  // color: Color(0xFF78909C),
+                                  // color: Color(0xFF9E9D24),
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Text(
+                                  'Pop',
+                                  style: TextStyle(
+                                    color: Color(0xFFffffff),
+                                    fontSize: 12
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        // buttons
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Color(0x11000000),
+                                width:1
+                              )
+                            )
+                          ),
+                          child: Row(
+                            children: [
+
+                              // edit
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color: Color(0x11000000),
+                                        width: 1
+                                      )
+                                    )
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () => {}, 
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 30,
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 18, 
+                                            color: Color(0xFF1166ff)
+                                          ),
+                                        ),
+                                        SizedBox(width:1),
+                                        const Text(
+                                          'Ubah',
+                                          style: TextStyle(
+                                            color: Color(0xFF1166ff),
+                                            fontSize: 14
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ),
+                                ),
+                              ),
+                              
+                              // delete
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(
+                                        color: Color(0x11000000),
+                                        width: 1
+                                      )
+                                    )
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () => {}, 
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 30,
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 18, 
+                                            color: Color.fromARGB(255, 255, 82, 97)
+                                          ),
+                                        ),
+                                        SizedBox(width:1),
+                                        const Text(
+                                          'Hapus',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(255, 255, 82, 97),
+                                            fontSize: 14
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ),
+                                ),
+                              ),
+                              
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   );
                 },
