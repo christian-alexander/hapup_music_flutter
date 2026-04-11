@@ -10,6 +10,8 @@ class MusicList extends StatefulWidget {
 
 class _MusicListState extends State<MusicList> {
 
+  String? _filterGenre = 'all'; 
+
   Future<void> _handleLogout() async {
 
     final confirmed = await showDialog<bool>(
@@ -85,9 +87,175 @@ class _MusicListState extends State<MusicList> {
         ],
       ),
       body: Container(
-        child: Text(
-          "MusicList"
-        )
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            // searchbox 
+            Container(
+              width: double.infinity,
+              height: 40,
+              child: TextField(
+                style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 18,
+                    color: Color(0xFF000000)
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
+                  ),
+                  hintText: 'Cari...',
+                  hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
+                ),
+              ),
+            ),
+            
+            // dropdown genre
+            Container(
+              width: double.infinity,
+              height: 40,
+              margin: EdgeInsets.only(
+                top: 10, 
+                bottom: 10
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10), 
+              decoration: BoxDecoration(
+                border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  // icon
+                  Icon(
+                    Icons.filter_alt_outlined, 
+                    size: 18,
+                    color: Color(0xFF000000)
+                  ),
+
+                  SizedBox(width:10),
+
+                  // dropdown 
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: _filterGenre,
+                        hint: Text("Pilih genre"),
+                        style: TextStyle(
+                          fontSize: 14
+                        ),
+                        items: [
+                          DropdownMenuItem(value: "all", child: Text("Semua Genre")),
+                          DropdownMenuItem(value: "rock", child: Text("Rock")),
+                          DropdownMenuItem(value: "pop", child: Text("Pop")),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _filterGenre = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ) 
+            ),
+
+            // Info 
+            Container(
+              height:30, 
+              margin: EdgeInsets.only(
+                bottom: 10
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Info lagu 
+                  Container(
+                    width: 100, 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '20 Musik',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Color(0x88000000)
+                          )
+                        ),
+                      ],
+                    )
+                  ),
+
+                  const Spacer(),
+
+                  Container(
+                    child: GestureDetector(
+                      onTap: () => Text('testus'),
+                      child: Container(
+                        padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFffffff),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.sort_rounded,
+                              color: Color(0xFF000000), 
+                              size: 16
+                            ),
+                            
+                            SizedBox(width: 5),
+                            
+                            Text(
+                              "testuss",
+                              style: const TextStyle(
+                                  color: Color(0xFF000000),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ),
+
+            // music list
+            Expanded(
+              child: ListView.builder(
+                itemCount: 50,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.all(10),
+                    elevation: 3,
+                    child: ListTile(
+                      leading: Icon(Icons.dashboard),
+                      title: Text("Card $index"),
+                      subtitle: Text("Deskripsi card $index"),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
