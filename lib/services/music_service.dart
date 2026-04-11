@@ -79,7 +79,7 @@ class MusicService {
       select 
         a.id,
         a.title,
-        a.artist,
+        a.singer,
         a.genre_id,
         b.name AS genre
       from 
