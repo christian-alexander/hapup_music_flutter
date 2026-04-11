@@ -2,13 +2,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class MusicService {
-  static Future<Database> initDB() async {
+
+  static late Database _db;
+
+  static Future<void> initDB() async {
     // func init db, penting, untuk init db sebelum melakukan semua query
     // dipanggil dari splash page utama
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'happy_music.db');
 
-    return await openDatabase(
+    _db = await openDatabase(
       path,
       // pengint: configure agar sqlite aktifkan foreign key (relasi genre dan music)
       onConfigure: (db) async {
@@ -55,7 +58,7 @@ class MusicService {
 
   // crud musics
   // get (+ joined with genre) dan filters serta orders  
-  static Future<List<Map<String, dynamic>>> getMusicWithGenre(Database db, Map<String, dynamic> filters, String orderKey, String orderDirection) async {
+  static Future<List<Map<String, dynamic>>> getMusicWithGenre( Map<String, dynamic> filters, String orderKey, String orderDirection) async {
 
     // wheres and order by
     String wheres = ''; 
@@ -75,7 +78,7 @@ class MusicService {
       wheres =  'where ${conditions.join(' and ')}';
     }
 
-    return await db.rawQuery('''
+    return await _db.rawQuery('''
       select 
         a.id,
         a.title,
@@ -92,17 +95,17 @@ class MusicService {
   }
 
   // create
-  static Future<int> createMusic(Database db, String title, String singer, int genreId) async {;
-    return await db.rawInsert('insert into music (title, singer, genre_id) values (?,?,?)', [title, singer, genreId]);
+  static Future<int> createMusic(String title, String singer, int genreId) async {;
+    return await _db.rawInsert('insert into music (title, singer, genre_id) values (?,?,?)', [title, singer, genreId]);
   }
 
   // update
-  static Future<int> updateMusic(Database db, int id, String title, String singer, int genreId) async {
-    return await db.rawUpdate('update music set title = ?, singer = ?, genre_id = ? where id = ?', [title, singer, genreId, id]);
+  static Future<int> updateMusic(int id, String title, String singer, int genreId) async {
+    return await _db.rawUpdate('update music set title = ?, singer = ?, genre_id = ? where id = ?', [title, singer, genreId, id]);
   }
 
   // delete
-  static Future<int> deleteMusic(Database db, int id) async {
-    return await db.rawDelete('delete from music where id = ?', [id]);
+  static Future<int> deleteMusic(int id) async {
+    return await _db.rawDelete('delete from music where id = ?', [id]);
   }
 }
