@@ -45,7 +45,8 @@ class _MusicListState extends State<MusicList> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF6777EF),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10)
+              ),
             ),
             child: const Text('Keluar',
                 style: TextStyle(color: Colors.white)),
@@ -62,6 +63,67 @@ class _MusicListState extends State<MusicList> {
         ),
       );
     }
+  }
+
+  // bottom sheet untuk pilihan sort 
+  void _showSortSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: const BoxDecoration(
+          color: Color(0xFFffffff),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(100, 0, 0, 0),
+                    borderRadius: BorderRadius.circular(2)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Urutkan berdasarkan',
+              style: TextStyle(
+                  color: Color(0xFF000000),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 16),
+            RadioGroup(
+              groupValue: "title_asc",
+              onChanged: (value) {
+                // setState(() => selectedValue = value!);
+              },
+              child: Column(
+                children: [
+                  RadioListTile(
+                    value: "title_asc",
+                    title: Text("Judul (a-Z)"),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  RadioListTile(
+                    value: "singer_asc",
+                    title: Text("Nama Penyanyi (a-Z)"),
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -142,7 +204,7 @@ class _MusicListState extends State<MusicList> {
                     color: Color(0xFF000000)
                   ),
 
-                  SizedBox(width:10),
+                  const SizedBox(width:10),
 
                   // dropdown 
                   Expanded(
@@ -201,38 +263,36 @@ class _MusicListState extends State<MusicList> {
 
                   const Spacer(),
 
-                  Container(
-                    child: GestureDetector(
-                      onTap: () => Text('testus'),
-                      child: Container(
-                        padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFffffff),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.sort_rounded,
-                              color: Color(0xFF000000), 
-                              size: 16
-                            ),
-                            
-                            SizedBox(width: 5),
-                            
-                            Text(
-                              "testuss",
-                              style: const TextStyle(
-                                  color: Color(0xFF000000),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
+                  GestureDetector(
+                    onTap: () => _showSortSheet(),
+                    child: Container(
+                      padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFffffff),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.sort_rounded,
+                            color: Color(0xFF000000), 
+                            size: 16
+                          ),
+                          
+                          const SizedBox(width: 5),
+                          
+                          Text(
+                            "testuss",
+                            style: const TextStyle(
+                                color: Color(0xFF000000),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               )
             ),
@@ -311,7 +371,7 @@ class _MusicListState extends State<MusicList> {
                                             color: Color(0xFF1166ff)
                                           ),
                                         ),
-                                        SizedBox(width:1),
+                                        const SizedBox(width:1),
                                         const Text(
                                           'Ubah',
                                           style: TextStyle(
@@ -349,7 +409,7 @@ class _MusicListState extends State<MusicList> {
                                             color: Color.fromARGB(255, 255, 82, 97)
                                           ),
                                         ),
-                                        SizedBox(width:1),
+                                        const SizedBox(width:1),
                                         const Text(
                                           'Hapus',
                                           style: TextStyle(
@@ -375,10 +435,10 @@ class _MusicListState extends State<MusicList> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
+      floatingActionButton: Container(
         height:45,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () => _showSortSheet(),
           backgroundColor: Color(0xFF6777EF),
           foregroundColor: Color(0xFFffffff),
           icon: Icon(Icons.add),
