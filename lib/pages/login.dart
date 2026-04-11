@@ -131,6 +131,8 @@ class _LoginState extends State<Login> {
                     fontSize: 12,
                   ),
                   decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                     contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -140,8 +142,6 @@ class _LoginState extends State<Login> {
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
                     ),
-                    hintText: 'Email',
-                    hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                   ),
                   onChanged: (value) => _email = value,
                 ),
@@ -160,6 +160,8 @@ class _LoginState extends State<Login> {
                     fontSize: 12,
                   ),
                   decoration: InputDecoration(
+                    labelText: "Password",
+                    labelStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                     contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -169,8 +171,6 @@ class _LoginState extends State<Login> {
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
                     ),
-                    hintText: 'Password',
-                    hintStyle: TextStyle(color: Color.fromARGB(100, 0, 0, 0)),
                   ),
                   onChanged: (value) => _password = value,
                 ),
