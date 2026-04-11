@@ -375,6 +375,16 @@ class _MusicListState extends State<MusicList> {
           ],
         ),
       ),
+      floatingActionButton: SizedBox(
+        height:45,
+        child: FloatingActionButton.extended(
+          onPressed: () {},
+          backgroundColor: Color(0xFF6777EF),
+          foregroundColor: Color(0xFFffffff),
+          icon: Icon(Icons.add),
+          label: Text("Tambah"),
+        ),
+      ),
     );
   }
 }
