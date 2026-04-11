@@ -30,7 +30,7 @@ class MusicService {
         await db.execute('''
           create table 
             music (
-              id integer primary_key autoincrement,
+              id integer primary key autoincrement,
               title text not null, 
               singer text, 
               genre_id integer not null
@@ -38,7 +38,7 @@ class MusicService {
         ''');
 
         // seed table genre (3 dummy genre)
-        await db.rawInsert('insert into genre (title) values ("pop"),("rock"),("jazz")');
+        await db.rawInsert('insert into genre (name) values ("pop"),("rock"),("jazz")');
 
         // seed table music
         await db.rawInsert('''
@@ -103,6 +103,6 @@ class MusicService {
 
   // delete
   static Future<int> deleteMusic(Database db, int id) async {
-    return await db.rawUpdate('delete from music where id = ?', [id]);
+    return await db.rawDelete('delete from music where id = ?', [id]);
   }
 }
