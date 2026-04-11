@@ -29,4 +29,15 @@ class AuthService {
     await prefs.setBool(_keyPrefsForLoggedIn, false);
     await prefs.setString(_keyPrefsForEmail, 'email');
   }
+
+  // check is logged in 
+  static Future<bool> isLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool(_keyPrefsForLoggedIn) != null){
+      if(prefs.getBool(_keyPrefsForLoggedIn) == true){
+        return true; 
+      }
+    }
+    return false;
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/login.dart';
+import 'pages/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,8 @@ class MainApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF8F9FC),
         fontFamily: "Roboto",
       ),
-      home: const Login(),
+      // home: const Login(),
+      home: const Splash(),
     );
   }
 }
