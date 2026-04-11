@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../login.dart';
+import 'music_form.dart';
 class MusicList extends StatefulWidget {
   const MusicList({super.key});
 
@@ -29,7 +30,7 @@ class _MusicListState extends State<MusicList> {
           )
         ),
         content: const Text(
-          'Apakah kamu yakin ingin keluar?',
+          'Apakah Anda yakin ingin keluar?',
           style: TextStyle(
             color: Color(0xFF888888)
           )
@@ -63,6 +64,24 @@ class _MusicListState extends State<MusicList> {
         ),
       );
     }
+  }
+
+  // push form page for add action
+  void _add() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const MusicForm(),
+      ),
+    );
+  }
+
+  // push form page for edit action
+  void _edit(int musicId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MusicForm(musicId: musicId),
+      ),
+    );
   }
 
   // bottom sheet untuk pilihan sort 
@@ -359,7 +378,7 @@ class _MusicListState extends State<MusicList> {
                                     )
                                   ),
                                   child: TextButton(
-                                    onPressed: () => {}, 
+                                    onPressed: () => _edit(1), 
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
@@ -438,7 +457,7 @@ class _MusicListState extends State<MusicList> {
       floatingActionButton: Container(
         height:45,
         child: FloatingActionButton.extended(
-          onPressed: () => _showSortSheet(),
+          onPressed: () => _add(),
           backgroundColor: Color(0xFF6777EF),
           foregroundColor: Color(0xFFffffff),
           icon: Icon(Icons.add),
