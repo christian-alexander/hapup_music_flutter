@@ -13,14 +13,27 @@ class MusicList extends StatefulWidget {
 class _MusicListState extends State<MusicList> {
 
   String? _filterGenre = 'all'; 
+  int? _genreId;
   // main data musics, dapat dari music service
   late Future _musics;
+  // genres data 
+  late Future _genres;
 
   @override
   void initState() {
     // saat perama kali, get musics
     super.initState();
-    _musics = MusicService.getMusicWithGenre(1, null, null);
+    _drawMusicData();
+    _genres = MusicService.getAllGenre();
+  }
+
+  String capitalize(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  Future<void> _drawMusicData() async {
+    _musics = MusicService.getMusicWithGenre(1, _genreId, null);
   }
 
   Future<void> _handleLogout() async {
@@ -83,6 +96,22 @@ class _MusicListState extends State<MusicList> {
         builder: (_) => const MusicForm(),
       ),
     );
+  }
+
+  void _changeGenre(String? value) {
+    // change state dari filter genre dan get ulang data
+    setState(() {
+      _filterGenre = value;
+
+      if(value != null && value != "all"){
+        _genreId = int.parse(value);
+      }else{
+        _genreId = null;
+      }
+    });
+
+    // get ulang data
+    _drawMusicData();
   }
 
   // push form page for edit action
@@ -196,6 +225,10 @@ class _MusicListState extends State<MusicList> {
                     size: 18,
                     color: Color(0xFF000000)
                   ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 35, // default biasanya 48 → ini bikin lebih dekat
+                    minHeight: 35,
+                  ),
                   contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -235,28 +268,47 @@ class _MusicListState extends State<MusicList> {
 
                   const SizedBox(width:10),
 
-                  // dropdown 
+                  // dropdown genres
                   Expanded(
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: _filterGenre,
-                        hint: Text("Pilih genre"),
-                        style: TextStyle(
-                          fontSize: 14
-                        ),
-                        items: [
-                          DropdownMenuItem(value: "all", child: Text("Semua Genre")),
-                          DropdownMenuItem(value: "rock", child: Text("Rock")),
-                          DropdownMenuItem(value: "pop", child: Text("Pop")),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _filterGenre = value;
-                          });
-                        },
-                      ),
-                    ),
+                    child: FutureBuilder(
+                      future: _genres,
+                      builder: (context, asyncSnapshot) {
+                        if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+
+                        if (asyncSnapshot.hasError) {
+                          return Text("Error: ${asyncSnapshot.error}");
+                        }
+
+                        final data = asyncSnapshot.data ?? [];
+
+                        if (data.isEmpty) {
+                          return const Text("Belum ada data");
+                        }
+
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: _filterGenre,
+                            hint: Text("Pilih genre", style: TextStyle(color: Colors.black)),
+                            items: [
+                              const DropdownMenuItem(value: "all", child: Text("Semua Genre")),
+                              ...data.map((genre) => DropdownMenuItem(
+                                    value: genre['id'].toString(),
+                                    child: Text(
+                                      capitalize(genre['name']),
+                                      style: TextStyle(
+                                        color: Colors.black
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                            onChanged: (value) => _changeGenre(value),
+                          ),
+                        );
+                      },
+                    )
                   ),
                 ],
               ) 

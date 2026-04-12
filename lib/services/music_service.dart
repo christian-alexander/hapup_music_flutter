@@ -54,6 +54,11 @@ class MusicService {
     );
   }
 
+  // get genre
+  static Future<List<Map<String, dynamic>>> getAllGenre() async {
+    return await _db.rawQuery('select * from genre');
+  }
+
   // crud musics
   // get (+ joined with genre) dan filters serta orders  
   static Future<List<Map<String, dynamic>>> getMusicWithGenre(int orderType, int? genreId, String? searchQuery) async {
