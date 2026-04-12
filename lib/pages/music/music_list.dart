@@ -44,8 +44,10 @@ class _MusicListState extends State<MusicList> {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  Future<void> _drawMusicData() async {
-    _musics = MusicService.getMusicWithGenre(_orderById, _genreId, _searchQuery);
+  void _drawMusicData() {
+    setState(() {
+      _musics = MusicService.getMusicWithGenre(_orderById, _genreId, _searchQuery);
+    });
   }
 
   Future<void> _handleLogout() async {
@@ -126,24 +128,6 @@ class _MusicListState extends State<MusicList> {
     _drawMusicData();
   }
 
-  // push form page for add action
-  void _add() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const MusicForm(),
-      ),
-    );
-  }
-
-  // push form page for edit action
-  void _edit(int musicId) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => MusicForm(musicId: musicId),
-      ),
-    );
-  }
-
   // bottom sheet untuk pilihan sort 
   void _showSortSheet() {
     showModalBottomSheet(
@@ -214,6 +198,30 @@ class _MusicListState extends State<MusicList> {
     // redraw
     _drawMusicData();
   }
+
+  // push form page for add action
+  void _add() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const MusicForm(),
+      ),
+    );
+
+    if(result == true){
+      // get ulang data
+      _drawMusicData();
+    }
+  }
+
+  // push form page for edit action
+  void _edit(int musicId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MusicForm(musicId: musicId),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +324,7 @@ class _MusicListState extends State<MusicList> {
                         final data = asyncSnapshot.data ?? [];
 
                         if (data.isEmpty) {
-                          return const Text("Musik tidak ditemukan");
+                          return const Text("Genre tidak ditemukan");
                         }
 
                         return DropdownButtonHideUnderline(

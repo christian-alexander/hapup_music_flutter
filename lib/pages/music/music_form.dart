@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/music_service.dart';
 class MusicForm extends StatefulWidget {
   final int? musicId;
   const MusicForm({super.key, this.musicId});
@@ -8,9 +9,39 @@ class MusicForm extends StatefulWidget {
 }
 
 class _MusicFormState extends State<MusicForm> {
+  String _title = '';
+  String _singer = '';
+  String? _genreId;
+  bool _inputValid = true;
+  // genres data 
+  late Future _genres;
 
-  void _back() {
-    Navigator.pop(context, "data");
+  @override
+  void initState() {
+    // saat perama kali, get musics
+    super.initState();
+    _genres = MusicService.getAllGenre();
+  }
+
+  String capitalize(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  void _backAfterFill() {
+    Navigator.pop(context, true);
+  }
+
+  void _saveChanges() async{
+    if(_title != "" && _singer != "" && _genreId != null){
+      setState(() {
+        _inputValid = true;
+      });
+      await MusicService.createMusic(_title, _singer, int.parse(_genreId!));
+      _backAfterFill();
+    }else{
+      _inputValid = false;
+    }
   }
 
   @override
@@ -25,7 +56,7 @@ class _MusicFormState extends State<MusicForm> {
             size: 20,
             color: Color(0xFFffffff)
           ),
-          onPressed: () => _back(),
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           (widget.musicId == null)? "Tambah Musik" : "Ubah Musik",
@@ -42,6 +73,42 @@ class _MusicFormState extends State<MusicForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              _inputValid == false ?
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 82, 97),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    const Icon(
+                      // icons
+                      Icons.error_outline,
+                      color: Color.fromARGB(255, 255, 255, 255), 
+                      size: 18
+                    ),
+                    // sizedbox cuma buat spasi
+                    const SizedBox(width: 8),
+                    // expanded perlu agar text auto kebawah jika tidak cukup
+                    Expanded(
+                      child: const Text(
+                        "Harap isi semua isian!",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255)
+                        ),
+                      ), 
+                    )
+                    
+                  ],
+                )
+              )
+              : const SizedBox.shrink(),
+
               // inputan judul
               Container(
                 margin: EdgeInsets.only(
@@ -66,6 +133,7 @@ class _MusicFormState extends State<MusicForm> {
                       borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
                     ),
                   ),
+                  onChanged: (value) => _title = value,
                 ),
               ),
               
@@ -93,39 +161,67 @@ class _MusicFormState extends State<MusicForm> {
                       borderSide: BorderSide(color: Color.fromARGB(50, 0, 0, 0)),
                     ),
                   ),
+                  onChanged: (value) => _singer = value,
                 ),
               ),
               
               // selector genre 
-              Container(
-                width: double.infinity,
-                height: 40,
-                margin: EdgeInsets.only(
-                  bottom: 10
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10), 
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    hint: Text("Pilih genre"),
-                    style: TextStyle(
-                      fontSize: 14
+              FutureBuilder(
+                future: _genres,
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (asyncSnapshot.hasError) {
+                    return Text("Error: ${asyncSnapshot.error}");
+                  }
+
+                  final data = asyncSnapshot.data ?? [];
+
+                  if (data.isEmpty) {
+                    return const Text("Genre tidak ditemukan");
+                  }
+
+                  return Container(
+                    width: double.infinity,
+                    height: 40,
+                    margin: EdgeInsets.only(
+                      bottom: 10
                     ),
-                    items: [
-                      DropdownMenuItem(value: "rock", child: Text("Rock")),
-                      DropdownMenuItem(value: "pop", child: Text("Pop")),
-                    ],
-                    onChanged: (value) {
-                      // setState(() {
-                      //   _filterGenre = value;
-                      // });
-                    },
-                  ),
-                ) 
+                    padding: EdgeInsets.symmetric(horizontal: 10), 
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color.fromARGB(50, 0, 0, 0)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: _genreId,
+                        hint: Text("Pilih genre"),
+                        style: TextStyle(
+                          fontSize: 14
+                        ),
+                       items: [
+                          ...data.map((genre) => DropdownMenuItem(
+                                value: genre['id'].toString(),
+                                child: Text(
+                                  capitalize(genre['name']),
+                                  style: TextStyle(
+                                    color: Colors.black
+                                  ),
+                                ),
+                              ))
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _genreId = value;
+                          });
+                        },
+                      ),
+                    ) 
+                  );
+                }
               ),
 
               // button save 
@@ -140,8 +236,8 @@ class _MusicFormState extends State<MusicForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  // on press try login untuk cek pw 
-                  onPressed: () {},
+                  // on press save changes 
+                  onPressed: _saveChanges,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

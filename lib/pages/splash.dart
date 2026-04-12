@@ -24,7 +24,6 @@ class _SplashState extends State<Splash> {
 
   Future<void> _checkLoggedIn() async {
     final isLogged = await AuthService.isLogged();
-    print(isLogged);
     if(isLogged){
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
