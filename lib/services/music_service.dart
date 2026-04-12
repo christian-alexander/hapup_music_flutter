@@ -39,15 +39,16 @@ class MusicService {
         ''');
 
         // seed table genre (3 dummy genre)
-        await db.rawInsert('insert into genre (name, badge_color) values ("pop","8D6E63"),("rock", "78909C"),("jazz", "9E9D24")');
+        await db.rawInsert('insert into genre (name, badge_color) values ("pop","#8D6E63"),("rock", "#78909C"),("jazz", "#9E9D24")');
 
         // seed table music
         await db.rawInsert('''
           insert into music
             (title,singer, genre_id)
           values
-            ("Ordinary World", "Duran Duran", 1),
-            ("Forever Young", "Aphaville", 2),
+            ("Ordinary World", "Duran Duran", 2),
+            ("Forever Young", "Aphaville", 1),
+            ("Cant Help Falling In Love", "Elvis Presley", 1),
             ("What A Beautiful World", "Louis Armstrong", 3)
         ''');         
       },

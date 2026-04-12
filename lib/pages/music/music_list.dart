@@ -19,6 +19,13 @@ class _MusicListState extends State<MusicList> {
   String? _filterGenre = 'all'; 
   int? _genreId;
 
+  // orderby states
+  final Map<int, String> _orderByLabels = {
+    1: 'Judul (a-Z)',
+    2: 'Nama Penyayi (a-Z)'
+  };
+  int _orderById = 1;
+
   // main data musics, dapat dari music service
   late Future _musics;
   // genres data 
@@ -38,7 +45,7 @@ class _MusicListState extends State<MusicList> {
   }
 
   Future<void> _drawMusicData() async {
-    _musics = MusicService.getMusicWithGenre(1, _genreId, _searchQuery);
+    _musics = MusicService.getMusicWithGenre(_orderById, _genreId, _searchQuery);
   }
 
   Future<void> _handleLogout() async {
@@ -171,21 +178,19 @@ class _MusicListState extends State<MusicList> {
             ),
             const SizedBox(height: 16),
             RadioGroup(
-              groupValue: "title_asc",
-              onChanged: (value) {
-                // setState(() => selectedValue = value!);
-              },
+              groupValue: _orderById,
+              onChanged: (value) => _orderBy(value!),
               child: Column(
                 children: [
                   RadioListTile(
-                    value: "title_asc",
-                    title: Text("Judul (a-Z)"),
+                    value: 1,
+                    title: Text(_orderByLabels[1]!),
                     controlAffinity: ListTileControlAffinity.trailing,
                     contentPadding: EdgeInsets.zero,
                   ),
                   RadioListTile(
-                    value: "singer_asc",
-                    title: Text("Nama Penyanyi (a-Z)"),
+                    value: 2,
+                    title: Text(_orderByLabels[2]!),
                     controlAffinity: ListTileControlAffinity.trailing,
                     contentPadding: EdgeInsets.zero,
                   ),
@@ -196,6 +201,18 @@ class _MusicListState extends State<MusicList> {
         ),
       ),
     );
+  }
+
+  void _orderBy(int value){
+    setState(() {
+      _orderById = value;
+    });
+
+    // close bottom sheet
+    Navigator.pop(context);
+    
+    // redraw
+    _drawMusicData();
   }
 
   @override
@@ -398,7 +415,7 @@ class _MusicListState extends State<MusicList> {
                           const SizedBox(width: 5),
                           
                           Text(
-                            "testuss",
+                            _orderByLabels[_orderById]!,
                             style: const TextStyle(
                                 color: Color(0xFF000000),
                                 fontSize: 12,
@@ -450,7 +467,7 @@ class _MusicListState extends State<MusicList> {
                                   Container(
                                     padding: EdgeInsets.all(5),
                                     decoration: BoxDecoration(
-                                      color: Color(int.parse("0xFF${music['badge_color']}")),
+                                      color: Color(int.parse(music['badge_color'].replaceFirst('#', '0xff'))),
                                       // color: Color(0xFF78909C),
                                       // color: Color(0xFF9E9D24),
                                       borderRadius: BorderRadius.circular(10)
