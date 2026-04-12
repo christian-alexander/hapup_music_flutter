@@ -12,8 +12,13 @@ class MusicList extends StatefulWidget {
 
 class _MusicListState extends State<MusicList> {
 
+  // search states 
+  String? _searchQuery;
+
+  // genre states 
   String? _filterGenre = 'all'; 
   int? _genreId;
+
   // main data musics, dapat dari music service
   late Future _musics;
   // genres data 
@@ -33,7 +38,7 @@ class _MusicListState extends State<MusicList> {
   }
 
   Future<void> _drawMusicData() async {
-    _musics = MusicService.getMusicWithGenre(1, _genreId, null);
+    _musics = MusicService.getMusicWithGenre(1, _genreId, _searchQuery);
   }
 
   Future<void> _handleLogout() async {
@@ -89,13 +94,13 @@ class _MusicListState extends State<MusicList> {
     }
   }
 
-  // push form page for add action
-  void _add() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const MusicForm(),
-      ),
-    );
+  void _search(String? value){
+    setState(() {
+      _searchQuery = value;
+    });
+
+    // redraw 
+    _drawMusicData();
   }
 
   void _changeGenre(String? value) {
@@ -112,6 +117,15 @@ class _MusicListState extends State<MusicList> {
 
     // get ulang data
     _drawMusicData();
+  }
+
+  // push form page for add action
+  void _add() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const MusicForm(),
+      ),
+    );
   }
 
   // push form page for edit action
@@ -215,6 +229,7 @@ class _MusicListState extends State<MusicList> {
               width: double.infinity,
               height: 40,
               child: TextField(
+                onChanged: (value) => _search(value),
                 style: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 14,
@@ -284,7 +299,7 @@ class _MusicListState extends State<MusicList> {
                         final data = asyncSnapshot.data ?? [];
 
                         if (data.isEmpty) {
-                          return const Text("Belum ada data");
+                          return const Text("Musik tidak ditemukan");
                         }
 
                         return DropdownButtonHideUnderline(

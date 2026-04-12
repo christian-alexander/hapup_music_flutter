@@ -77,7 +77,10 @@ class MusicService {
         params.add(genreId);
       }
       if(searchQuery != null){
-        filters += ' and (a.title like ? or a.singer like ? or b.name like ?)';
+        if(genreId != null){
+          filters += ' and';
+        }
+        filters += ' (a.title like ? or a.singer like ? or b.name like ?)';
         params.add('%$searchQuery%');
         params.add('%$searchQuery%');
         params.add('%$searchQuery%');
