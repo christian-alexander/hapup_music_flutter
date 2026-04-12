@@ -13,7 +13,7 @@ class _LoginState extends State<Login> {
   String _password = '';
   bool _isWrongCredential = false;
 
-  Future<void> _handleLogin() async {
+  Future<void> _login() async {
     final successLogin = await AuthService.processLogin(
       _email.trim(),
       _password,
@@ -193,7 +193,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   // on press try login untuk cek pw 
-                  onPressed: () => _handleLogin(),
+                  onPressed: () => _login(),
                   child: const Text('Login'),
                 ),
               ),

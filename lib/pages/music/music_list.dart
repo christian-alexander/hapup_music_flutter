@@ -50,7 +50,7 @@ class _MusicListState extends State<MusicList> {
     });
   }
 
-  Future<void> _handleLogout() async {
+  Future<void> _logout() async {
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -228,6 +228,69 @@ class _MusicListState extends State<MusicList> {
   }
 
 
+  Future<void> _delete(int id) async {
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFFffffff),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)
+        ),
+        title: const Text(
+          'Hapus',
+          style: TextStyle(
+            color: Color(0xFF000000), 
+            fontWeight: FontWeight.w700
+          )
+        ),
+        content: const Text(
+          'Apakah Anda yakin ingin menghapus musik ini?',
+          style: TextStyle(
+            color: Color(0xFF888888)
+          )
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Batal',
+                style: TextStyle(color: Color(0xFF888888))),
+          ),
+          ElevatedButton(
+            onPressed: () => _processDelete(ctx, id),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 255, 82, 97),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+              ),
+            ),
+            child: const Text('Hapus',
+                style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+
+    if(confirmed == true){
+      await AuthService.processLogout();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const Login(),
+        ),
+      );
+    }
+  }
+
+  void _processDelete(BuildContext ctx, int id) async {
+    await MusicService.deleteMusic(id);
+
+    // redraw 
+    _drawMusicData();
+
+    // pop
+    Navigator.pop(ctx, false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,7 +309,7 @@ class _MusicListState extends State<MusicList> {
               size: 18,
               color: Color(0xFFffffff)
             ),
-            onPressed: () => _handleLogout(),
+            onPressed: () => _logout(),
           )
         ],
       ),
@@ -560,7 +623,7 @@ class _MusicListState extends State<MusicList> {
                                         )
                                       ),
                                       child: TextButton(
-                                        onPressed: () => {}, 
+                                        onPressed: () => _delete(music['id']), 
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
@@ -602,12 +665,12 @@ class _MusicListState extends State<MusicList> {
       ),
       floatingActionButton: Container(
         height:45,
-        child: FloatingActionButton.extended(
+        width:45,
+        child: FloatingActionButton(
           onPressed: () => _add(),
           backgroundColor: Color(0xFF6777EF),
           foregroundColor: Color(0xFFffffff),
-          icon: Icon(Icons.add),
-          label: Text("Tambah"),
+          child: Icon(Icons.add),
         ),
       ),
     );
