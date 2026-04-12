@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../services/music_service.dart';
 import 'music/music_list.dart';
 import 'login.dart';
 
@@ -15,8 +16,10 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    _checkLoggedIn();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await MusicService.initDB();
+      await _checkLoggedIn();
+    });
   }
 
   Future<void> _checkLoggedIn() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
+import '../../services/music_service.dart';
 import '../login.dart';
 import 'music_form.dart';
 class MusicList extends StatefulWidget {
@@ -318,137 +319,157 @@ class _MusicListState extends State<MusicList> {
 
             // music list
             Expanded(
-              child: ListView.builder(
-                itemCount: 50,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.all(10),
-                    elevation: 3,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.music_note_outlined),
-                          title: Text("Judul $index"),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Penyanyi $index"),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF8D6E63),
-                                  // color: Color(0xFF78909C),
-                                  // color: Color(0xFF9E9D24),
-                                  borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Text(
-                                  'Pop',
-                                  style: TextStyle(
-                                    color: Color(0xFFffffff),
-                                    fontSize: 12
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        
-                        // buttons
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Color(0x11000000),
-                                width:1
-                              )
-                            )
-                          ),
-                          child: Row(
-                            children: [
+              child: FutureBuilder(
+                future: MusicService.getMusicWithGenre(1, null, null),
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                              // edit
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      right: BorderSide(
-                                        color: Color(0x11000000),
-                                        width: 1
-                                      )
-                                    )
+                  if (asyncSnapshot.hasError) {
+                    return Center(child: Text("Error: ${asyncSnapshot.error}"));
+                  }
+
+                  final data = asyncSnapshot.data ?? [];
+
+                  if (data.isEmpty) {
+                    return const Center(child: Text("Belum ada data"));
+                  }
+
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final music = data[index];
+                      return Card(
+                        margin: EdgeInsets.all(10),
+                        elevation: 3,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.music_note_outlined),
+                              title: Text(music['title']),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(music['singer']),
+                                  Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Color(int.parse("0xFF${music['badge_color']}")),
+                                      // color: Color(0xFF78909C),
+                                      // color: Color(0xFF9E9D24),
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Text(
+                                      music['genre'],
+                                      style: TextStyle(
+                                        color: Color(0xFFffffff),
+                                        fontSize: 12
+                                      ),
+                                    ),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () => _edit(1), 
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 30,
-                                          child: Icon(
-                                            Icons.edit,
-                                            size: 18, 
-                                            color: Color(0xFF1166ff)
-                                          ),
-                                        ),
-                                        const SizedBox(width:1),
-                                        const Text(
-                                          'Ubah',
-                                          style: TextStyle(
-                                            color: Color(0xFF1166ff),
-                                            fontSize: 14
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ),
-                                ),
+                                ],
                               ),
-                              
-                              // delete
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      right: BorderSide(
-                                        color: Color(0x11000000),
-                                        width: 1
-                                      )
-                                    )
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () => {}, 
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 30,
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 18, 
-                                            color: Color.fromARGB(255, 255, 82, 97)
-                                          ),
-                                        ),
-                                        const SizedBox(width:1),
-                                        const Text(
-                                          'Hapus',
-                                          style: TextStyle(
-                                            color: Color.fromARGB(255, 255, 82, 97),
-                                            fontSize: 14
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ),
-                                ),
+                            ),
+                            
+                            // buttons
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                    color: Color(0x11000000),
+                                    width:1
+                                  )
+                                )
                               ),
-                              
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                              child: Row(
+                                children: [
+                  
+                                  // edit
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          right: BorderSide(
+                                            color: Color(0x11000000),
+                                            width: 1
+                                          )
+                                        )
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () => _edit(1), 
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 30,
+                                              child: Icon(
+                                                Icons.edit,
+                                                size: 18, 
+                                                color: Color(0xFF1166ff)
+                                              ),
+                                            ),
+                                            const SizedBox(width:1),
+                                            const Text(
+                                              'Ubah',
+                                              style: TextStyle(
+                                                color: Color(0xFF1166ff),
+                                                fontSize: 14
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                  // delete
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          right: BorderSide(
+                                            color: Color(0x11000000),
+                                            width: 1
+                                          )
+                                        )
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () => {}, 
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 30,
+                                              child: Icon(
+                                                Icons.delete,
+                                                size: 18, 
+                                                color: Color.fromARGB(255, 255, 82, 97)
+                                              ),
+                                            ),
+                                            const SizedBox(width:1),
+                                            const Text(
+                                              'Hapus',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(255, 255, 82, 97),
+                                                fontSize: 14
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                  
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
                   );
-                },
+                }
               ),
             ),
           ],

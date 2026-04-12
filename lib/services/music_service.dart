@@ -13,10 +13,7 @@ class MusicService {
 
     _db = await openDatabase(
       path,
-      // pengint: configure agar sqlite aktifkan foreign key (relasi genre dan music)
-      onConfigure: (db) async {
-        await db.execute('pragma foreign_keys = on') ;
-      },
+      version: 1,
       // ketika init, buat tabel dlu
       onCreate: (db, version) async {
 
@@ -24,8 +21,9 @@ class MusicService {
         await db.execute('''
           create table 
             genre (
-              id integer, 
-              name text not null
+              id integer primary key autoincrement, 
+              name text not null,
+              badge_color text not null
             )
         ''');
 
@@ -41,7 +39,7 @@ class MusicService {
         ''');
 
         // seed table genre (3 dummy genre)
-        await db.rawInsert('insert into genre (name) values ("pop"),("rock"),("jazz")');
+        await db.rawInsert('insert into genre (name, badge_color) values ("pop","8D6E63"),("rock", "78909C"),("jazz", "9E9D24")');
 
         // seed table music
         await db.rawInsert('''
@@ -58,24 +56,40 @@ class MusicService {
 
   // crud musics
   // get (+ joined with genre) dan filters serta orders  
-  static Future<List<Map<String, dynamic>>> getMusicWithGenre( Map<String, dynamic> filters, String orderKey, String orderDirection) async {
+  static Future<List<Map<String, dynamic>>> getMusicWithGenre(int orderType, int? genreId, String? searchQuery) async {
+    // order type 1 by nama lagu asc,
+    // order type 2 by nama penyanyi asc
+    // genre id if null semua genre 
+    // searchQuery where like
 
-    // wheres and order by
-    String wheres = ''; 
-    String strOrderBy = 'order by $orderKey $orderDirection';
+    // filters
+    String filters = '';
+    List<dynamic> params = [];
+    if(genreId != null || searchQuery != null){
+      filters = ' where ';
+      if(genreId != null){
+        filters += ' genre_id = ?';
+        params.add(genreId);
+      }
+      if(searchQuery != null){
+        filters += ' and (a.title like ? or a.singer like ? or b.name like ?)';
+        params.add('%$searchQuery%');
+        params.add('%$searchQuery%');
+        params.add('%$searchQuery%');
+      }
+    }
 
-    // arr kosong conditions dan arguments 
-    List<String> conditions = [];
-    List<dynamic> args = [];
-
-    // add to arr wheres
-    filters.forEach((key, value) {
-      conditions.add('$key = ?');
-      args.add(value);
-    });
-
-    if(conditions.isNotEmpty){
-      wheres =  'where ${conditions.join(' and ')}';
+    // str untuk orderby
+    String strOrderBy = '';
+    switch(orderType){
+      case 1: 
+        strOrderBy = ' order by a.title asc';
+        break;
+      case 2: 
+        strOrderBy = ' order by a.singer asc';
+        break;
+      default: 
+        break;
     }
 
     return await _db.rawQuery('''
@@ -84,14 +98,15 @@ class MusicService {
         a.title,
         a.singer,
         a.genre_id,
-        b.name AS genre
+        b.name AS genre,
+        b.badge_color
       from 
         music as a
         left join genre as b
           on b.id = a.genre_id
-      $wheres
+      $filters
       $strOrderBy
-    ''', args);
+    ''', params);
   }
 
   // create
