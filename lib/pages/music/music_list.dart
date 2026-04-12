@@ -210,6 +210,14 @@ class _MusicListState extends State<MusicList> {
     if(result == true){
       // get ulang data
       _drawMusicData();
+
+      // toast 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Color(0xFF4c60da),
+          content: Text("Berhasil menambah musik"),
+        ),
+      );
     }
   }
 
@@ -224,6 +232,14 @@ class _MusicListState extends State<MusicList> {
     if(result == true){
       // get ulang data
       _drawMusicData();
+
+      // toast 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Color(0xFF4c60da),
+          content: Text("Berhasil mengubah musik"),
+        ),
+      );
     }
   }
 
@@ -289,6 +305,14 @@ class _MusicListState extends State<MusicList> {
 
     // pop
     Navigator.pop(ctx, false);
+
+    // toast 
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Color(0xFF4c60da),
+        content: Text("Berhasil menghapus musik"),
+      ),
+    );
   }
 
   @override
