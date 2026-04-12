@@ -345,13 +345,32 @@ class _MusicListState extends State<MusicList> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '20 Musik',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color(0x88000000)
-                          )
+                        FutureBuilder(
+                          future: _musics,
+                          builder: (context, asyncSnapshot) {
+                            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(child: Text(""));
+                            }
+
+                            if (asyncSnapshot.hasError) {
+                              return Center(child: Text("Error: ${asyncSnapshot.error}"));
+                            }
+
+                            final data = asyncSnapshot.data ?? [];
+
+                            if (data.isEmpty) {
+                              return const Center(child: Text(""));
+                            }
+
+                            return Text(
+                              '${data.length} Musik',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Color(0x88000000)
+                              )
+                            );
+                          }
                         ),
                       ],
                     )
