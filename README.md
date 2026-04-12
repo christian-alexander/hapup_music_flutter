@@ -93,22 +93,52 @@ untuk ke halaman ini, user harus login terlebih dahulu.
 3. jika konfirm, akan diproses hapus oleh music service
 
 --- 
+### apk build
+https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/happy_music.apk
+
+--- 
 ### Screenshots
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/9.jpeg">
+--- 
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/9.jpeg">
+
 Login page
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/8.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/8.jpeg">
+
 Index
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/7.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/7.jpeg">
+
 Urutkan
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/6.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/6.jpeg">
+
 Filter Genre
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/5.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/5.jpeg">
+
 Search
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/4.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/4.jpeg">
+
 Popup logout
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/3.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/3.jpeg">
+
 Popup Hapus
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/2.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/2.jpeg">
+
 Form Tambah
-<img src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/1.jpeg">
+--- 
+
+<img style="max-width:50%" src="https://raw.githubusercontent.com/christian-alexander/hapup_music_flutter/refs/heads/main/docs/1.jpeg">
+
 Form Ubah
