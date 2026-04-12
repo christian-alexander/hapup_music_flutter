@@ -13,6 +13,15 @@ class MusicList extends StatefulWidget {
 class _MusicListState extends State<MusicList> {
 
   String? _filterGenre = 'all'; 
+  // main data musics, dapat dari music service
+  late Future _musics;
+
+  @override
+  void initState() {
+    // saat perama kali, get musics
+    super.initState();
+    _musics = MusicService.getMusicWithGenre(1, null, null);
+  }
 
   Future<void> _handleLogout() async {
 
@@ -320,7 +329,7 @@ class _MusicListState extends State<MusicList> {
             // music list
             Expanded(
               child: FutureBuilder(
-                future: MusicService.getMusicWithGenre(1, null, null),
+                future: _musics,
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
