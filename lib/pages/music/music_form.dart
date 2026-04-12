@@ -69,7 +69,9 @@ class _MusicFormState extends State<MusicForm> {
       }
       _backAfterFill();
     }else{
-      _inputValid = false;
+      setState(() {
+        _inputValid = false;
+      });
     }
   }
 
