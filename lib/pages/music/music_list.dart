@@ -214,12 +214,17 @@ class _MusicListState extends State<MusicList> {
   }
 
   // push form page for edit action
-  void _edit(int musicId) {
-    Navigator.of(context).push(
+  void _edit(int musicId) async {
+    final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => MusicForm(musicId: musicId),
       ),
     );
+    
+    if(result == true){
+      // get ulang data
+      _drawMusicData();
+    }
   }
 
 
@@ -517,7 +522,7 @@ class _MusicListState extends State<MusicList> {
                                         )
                                       ),
                                       child: TextButton(
-                                        onPressed: () => _edit(1), 
+                                        onPressed: () => _edit(music['id']), 
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [

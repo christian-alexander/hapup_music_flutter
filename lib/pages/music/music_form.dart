@@ -16,11 +16,20 @@ class _MusicFormState extends State<MusicForm> {
   // genres data 
   late Future _genres;
 
+  // controllers
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _singerController = TextEditingController();
+
   @override
   void initState() {
-    // saat perama kali, get musics
+    // saat perama kali, get genres untuk combobox dan filleditform jika ini edit
     super.initState();
     _genres = MusicService.getAllGenre();
+
+    // if edit 
+    if(widget.musicId != null){
+      _fillEditForm();
+    }
   }
 
   String capitalize(String text) {
@@ -32,12 +41,32 @@ class _MusicFormState extends State<MusicForm> {
     Navigator.pop(context, true);
   }
 
+  void _fillEditForm() async {
+    final music = await MusicService.getMusicWithGenreById(widget.musicId!);
+    final editedMusic = music[0];
+
+    // set value
+    _titleController.text = editedMusic['title'];
+    _singerController.text = editedMusic['singer'];
+
+    // set sate
+    setState(() {
+      _title = editedMusic['title'];
+      _singer = editedMusic['singer'];
+      _genreId = editedMusic['genre_id'].toString();
+    });
+  }
+
   void _saveChanges() async{
     if(_title != "" && _singer != "" && _genreId != null){
       setState(() {
         _inputValid = true;
       });
-      await MusicService.createMusic(_title, _singer, int.parse(_genreId!));
+      if(widget.musicId == null){
+        await MusicService.createMusic(_title, _singer, int.parse(_genreId!));
+      }else{
+        await MusicService.updateMusic(widget.musicId!, _title, _singer, int.parse(_genreId!));
+      }
       _backAfterFill();
     }else{
       _inputValid = false;
@@ -116,6 +145,7 @@ class _MusicFormState extends State<MusicForm> {
                 ),
                 height: 40,
                 child: TextField(
+                  controller: _titleController, 
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontSize: 12,
@@ -144,6 +174,7 @@ class _MusicFormState extends State<MusicForm> {
                 ),
                 height: 40,
                 child: TextField(
+                  controller: _singerController,
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontSize: 12,

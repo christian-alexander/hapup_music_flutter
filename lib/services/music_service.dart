@@ -118,6 +118,26 @@ class MusicService {
     ''', params);
   }
 
+  
+  static Future<List<Map<String, dynamic>>> getMusicWithGenreById(int id) async {
+    return await _db.rawQuery('''
+      select 
+        a.id,
+        a.title,
+        a.singer,
+        a.genre_id,
+        b.name AS genre,
+        b.badge_color
+      from 
+        music as a
+        left join genre as b
+          on b.id = a.genre_id
+      where 
+        a.id = ?
+    ''', [id]);
+  }
+
+
   // create
   static Future<int> createMusic(String title, String singer, int genreId) async {;
     return await _db.rawInsert('insert into music (title, singer, genre_id) values (?,?,?)', [title, singer, genreId]);
